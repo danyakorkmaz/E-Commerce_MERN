@@ -55,5 +55,5 @@ export const login = async ({ email, password }: LoginParams) => {
 
 
 const generateJWT = (data:any) => {
-return jwt.sign (data,'SFNI1syAR7K5D3v8w32UQMGodIJ79mBc')//sign func. şifreli bir data oluşturuyor(data = iştediğimiz veri uzerine şifre, sicritkey : rakam mn ajıl tşfir albayanat tabana)
+return jwt.sign (data,'SFNI1syAR7K5D3v8w32UQMGodIJ79mBc')//sign func. şifreli bir data oluşturuyor(data = iştediğimiz veri uzerine şifre, secretkey : rakam mn ajıl tşfir albayanat tabana)
 }
