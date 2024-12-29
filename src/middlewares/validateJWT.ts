@@ -22,7 +22,7 @@ const validateJWT = (req: ExtendRequest, res: Response, next: NextFunction) => {
         return;
     }
 
-    jwt.verify(token, "SFNI1syAR7K5D3v8w32UQMGodIJ79mBc", async (err, payload) => {
+    jwt.verify(token, process.env.JWT_SECRET || '' , async (err, payload) => {
         if (err) {
             res.status(403).send("Invalid token")
             return;
