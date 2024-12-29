@@ -12,7 +12,7 @@ export interface ICartItem {
 
 export interface ICart extends Document {
     userId: ObjectId | string;
-    items: ICartItem[];
+    items: ICartItem [];
     totalAmount: number;
     status: "active" | "completed"
 }
