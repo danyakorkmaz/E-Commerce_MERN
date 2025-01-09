@@ -2,6 +2,8 @@ import userModel from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
 
+
+//Kullanıcıdan gelen kayıt verisini temsil eder.
 interface RegisterParams {
   firstName: string;
   lastName: string;
@@ -22,6 +24,7 @@ export const register = async ({
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
+  
   const newUser = new userModel({
     firstName,
     lastName,
@@ -30,9 +33,10 @@ export const register = async ({
   });
   await newUser.save();
 
-  return { data: generateJWT({firstName,lastName,email}), statusCode: 200 };
+  return { data: generateJWT({ firstName, lastName, email }), statusCode: 200 };
 };
 
+//*************************************************************** */
 
 interface LoginParams {
   email: string;
@@ -48,12 +52,12 @@ export const login = async ({ email, password }: LoginParams) => {
 
   const passwordMatch = await bcrypt.compare(password, findUser.password); //password === findUser.password;
   if (passwordMatch) {
-    return { data: generateJWT({email,firstName:findUser.firstName , lastName:findUser.lastName}) , statusCode: 200 };
+    return { data: generateJWT({ email, firstName: findUser.firstName, lastName: findUser.lastName }), statusCode: 200 };
   }
   return { data: "Incorrect email or password!", statusCode: 400 };
 };
 
 
-const generateJWT = (data:any) => {
-return jwt.sign (data, process.env.JWT_SECRET || '')//sign func. şifreli bir data oluşturuyor(data = iştediğimiz veri uzerine şifre, secretkey : rakam mn ajıl tşfir albayanat tabana)
+const generateJWT = (data: any) => {
+  return jwt.sign(data, process.env.JWT_SECRET || '')//sign func. şifreli bir data oluşturuyor(data = iştediğimiz veri uzerine şifre, secretkey : rakam mn ajıl tşfir albayanat tabana)
 }

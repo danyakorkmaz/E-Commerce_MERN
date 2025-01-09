@@ -21,7 +21,7 @@ router.get('/', validateJWT, async (req: ExtendRequest, res) => {
 router.post('/items', validateJWT, async (req: ExtendRequest, res) => {
     try {
         const userId = req?.user?._id;
-        const { productId, quantity } = req.body;
+        const { productId, quantity } = req.body; //İstek gövdesinden (body) gelen veriler.
         const response = await addItemToCart({ userId, productId, quantity })
         res.status(response.statusCode).send(response.data);
     } catch {
@@ -44,7 +44,7 @@ router.put("/items", validateJWT, async (req: ExtendRequest, res) => {
 router.delete("/items/:productId", validateJWT, async (req: ExtendRequest, res) => {
     try {
         const userId = req?.user?._id;
-        const { productId } = req.params;
+        const { productId } = req.params; //URL'den gelen parametreler.
         const response = await deleteItemInCart({ userId, productId });
         res.status(response.statusCode).send(response.data);
     } catch {
@@ -55,20 +55,20 @@ router.delete("/items/:productId", validateJWT, async (req: ExtendRequest, res) 
 
 router.delete("/", validateJWT, async (req: ExtendRequest, res) => {
     try {
- const userId = req?.user?._id;
-    const response = await clearCart({ userId });
-    res.status(response.statusCode).send(response.data);
+        const userId = req?.user?._id;
+        const response = await clearCart({ userId });
+        res.status(response.statusCode).send(response.data);
     } catch {
         res.status(500).send("Something went wrong!");
-    } 
+    }
 });
 
 router.post("/checkout", validateJWT, async (req: ExtendRequest, res) => {
-    try{
-const userId = req?.user?._id;
-    const { address } = req.body;
-    const response = await checkout({ userId, address });
-    res.status(response.statusCode).send(response.data);
+    try {
+        const userId = req?.user?._id;
+        const { address } = req.body;
+        const response = await checkout({ userId, address });
+        res.status(response.statusCode).send(response.data);
     } catch {
         res.status(500).send("Something went wrong!");
     }
