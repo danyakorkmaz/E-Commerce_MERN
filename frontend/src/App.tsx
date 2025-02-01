@@ -1,20 +1,21 @@
-import { BrowserRouter ,Routes, Route} from "react-router-dom"
-import HomePage from "./pages/HomePage"
-import Navbar from "./components/NavBar"
-import RegisterPage from "./pages/RegisterPage"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import Navbar from "./components/NavBar";
+import RegisterPage from "./pages/RegisterPage";
+import AuthProvider from "./context/Auth/AuthProvider";
 
 function App() {
-
   return (
-    <BrowserRouter>
-    <Navbar />
-      <Routes>
-        <Route path="/" element={ <HomePage />} />
-        <Route path="/register" element={ <RegisterPage />} />
-      </Routes>
-
-    </BrowserRouter>
-  )
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

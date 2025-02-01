@@ -1,6 +1,7 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import { BASE_URL } from "../constants/baseUrl";
+import { useAuth } from "../context/Auth/AuthContext";
 
 const RegisterPage = () => {
   const [error, setError] = useState("");
@@ -9,13 +10,20 @@ const RegisterPage = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
+  const { login } = useAuth();
+
   const onSubmit = async () => {
     const firstName = firstNameRef.current?.value;
     const lastName = lastNameRef.current?.value;
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
-
-    console.log(firstName, lastName, email, password);
+    
+    
+    //validate the form data
+    if (!firstName || !lastName || !email || !password) {
+     setError("check submited data ")
+        return;
+    }
 
     //make the call to API to create the user
     const response = await fetch(`${BASE_URL}/user/register`, {
@@ -36,8 +44,16 @@ const RegisterPage = () => {
       return;
     }
 
-    const data = await response.json();
-    console.log(data);
+    const token = await response.json();
+
+    if (!token) {
+      setError("Incorrect token");
+      return;
+    }
+
+    login(email, token);
+
+    console.log(token);
   };
 
   return (
@@ -79,7 +95,7 @@ const RegisterPage = () => {
           <Button onClick={onSubmit} variant="contained">
             Register
           </Button>
-          {error && <Typography sx={{color:"red"}}>{error}</Typography>}
+          {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
         </Box>
       </Box>
     </Container>
