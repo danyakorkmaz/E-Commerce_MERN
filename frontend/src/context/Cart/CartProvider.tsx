@@ -2,7 +2,6 @@ import { FC, useState, PropsWithChildren, useEffect } from "react";
 import { CartContext } from "./CartContext";
 import { CartItem } from "../../types/CartItem";
 import { BASE_URL } from "../../constants/baseUrl";
-import { Title } from "@mui/icons-material";
 import { useAuth } from "../Auth/AuthContext";
 
 const CartProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -88,8 +87,51 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
+
+
+  const updateItemInCart = async (productId: string,quantity: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}/cart/items`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization" : `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            productId,
+            quantity,
+          }),
+        });
+  
+        if (!response.ok) {
+          setError("Failed to update to cart");
+        }
+  
+        const cart = await response.json();
+  
+        if (!cart) {
+          setError("Failed to parse cart data");
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const cartItemsMapped = cart.items.map(({ product, quantity, unitPrice } : {product: any ; quantity : number; unitPrice: number}) => ({
+          productId: product._id,
+          title: product.title,
+          image: product.image,
+          quantity,
+          unitPrice: unitPrice,
+        }));
+  
+        setCartItems([...cartItemsMapped]);
+        setTotalAmount(cart.totalAmount);
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
+
+
   return (
-    <CartContext.Provider value={{ cartItems, totalAmount, addItemToCart }}>
+    <CartContext.Provider value={{ cartItems, totalAmount, addItemToCart, updateItemInCart}}>
       {children}
     </CartContext.Provider>
   );
