@@ -14,11 +14,11 @@ import ShoppingCart from "@mui/icons-material/ShoppingCart";
 import { useAuth } from "../context/Auth/AuthContext";
 import { Badge, Button, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useCart} from "../context/Cart/CartContext";
+import { useCart } from "../context/Cart/CartContext";
 
 function Navbar() {
   const { username, isAuthenticated, logout } = useAuth();
-  const {cartItems} = useCart()
+  const { cartItems } = useCart();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -35,16 +35,20 @@ function Navbar() {
   const handleLogin = () => {
     navigate("/login");
   };
+
+  const handlMyOrders = () => {
+    navigate("/my-orders");
+    handleCloseUserMenu();
+  }
   const handleLogout = () => {
     logout();
     navigate("/");
     handleCloseUserMenu();
   };
 
-
   const handleCart = () => {
-    navigate('/cart');
-  }
+    navigate("/cart");
+  };
 
   return (
     <AppBar position="static">
@@ -59,33 +63,37 @@ function Navbar() {
               width: "100%",
             }}
           >
-            <Button variant="text" sx={{color: '#ffff'}} onClick={() => navigate("/")}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
+            <Button
+              variant="text"
+              sx={{ color: "#ffff" }}
+              onClick={() => navigate("/")}
             >
-              <AdbIcon sx={{ display: "flex", mr: 1 }} />
-              <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                href="#app-bar-with-responsive-menu"
+              <Box
                 sx={{
-                  mr: 2,
-                  display: { xs: "none", md: "flex" },
-                  fontFamily: "monospace",
-                  color: "white",
-                  textDecoration: "none",
-                  fontWeight: 700,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                Koyluce Ex.
-              </Typography>
-            </Box>
-</Button>
+                <AdbIcon sx={{ display: "flex", mr: 1 }} />
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component="a"
+                  href="#app-bar-with-responsive-menu"
+                  sx={{
+                    mr: 2,
+                    display: { xs: "none", md: "flex" },
+                    fontFamily: "monospace",
+                    color: "white",
+                    textDecoration: "none",
+                    fontWeight: 700,
+                  }}
+                >
+                  Koyluce Ex.
+                </Typography>
+              </Box>
+            </Button>
 
             <Box
               display="flex"
@@ -96,7 +104,7 @@ function Navbar() {
             >
               <IconButton aria-label="cart" onClick={handleCart}>
                 <Badge badgeContent={cartItems.length} color="secondary">
-                  <ShoppingCart sx={{color: '#ffff'}}/>
+                  <ShoppingCart sx={{ color: "#ffff" }} />
                 </Badge>
               </IconButton>
               {isAuthenticated ? (
@@ -138,7 +146,7 @@ function Navbar() {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    <MenuItem onClick={handlMyOrders}>
                       <Typography sx={{ textAlign: "center" }}>
                         My Orders
                       </Typography>

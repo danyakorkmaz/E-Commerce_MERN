@@ -1,5 +1,7 @@
 import express from "express";
-import { login, register } from "../services/userService";
+import { getMyOrders, login, register } from "../services/userService";
+import validateJWT from "../middlewares/validateJWT";
+import { ExtendRequest } from "../types/extendedRequest";
 
 const router = express.Router();//tualej talabat http li anawen url
 //Bu rota, bir istemciden (frontend) /register adresine yapılan bir POST isteğini dinler.
@@ -27,6 +29,16 @@ router.post('/login', async (request, response) => { //sahb altalabat mn alfront
     }
 
 })
+
+router.get('/my-orders', validateJWT, async (request:ExtendRequest, response) => { //sahb altalabat mn alfrontend
+    try {
+         const userId = request?.user?._id;
+         const {statusCode , data} = await getMyOrders({ userId});
+         response.status(statusCode).send(data);
+     } catch (err) {
+         response.status(500).send("Something went wrong!")
+     }
+});
 
 
 export default router;
